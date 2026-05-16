@@ -1,0 +1,26 @@
+cat > .gitignore << 'EOF'
+# Python cache — ignore everywhere at any depth
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Environment & secrets
+.env
+
+# Database
+*.db
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+EOF
