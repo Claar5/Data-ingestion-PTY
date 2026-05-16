@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
-
+import os
+os.environ["PYTHONDONTWRITEBYTECODE"] = "1"
 # This adds the root project folder to the path so Python can find 'database'
 sys.path.append(str(Path(__file__).resolve().parents[2]))
 from database.database import init_db
