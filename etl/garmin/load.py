@@ -1,5 +1,5 @@
 import pandas as pd
-from db.database import get_connection
+from database.database import get_connection
 
 def load_activities(df: pd.DataFrame):
     if df.empty:
@@ -8,9 +8,18 @@ def load_activities(df: pd.DataFrame):
             "duration_secs","distance_meters","avg_hr","max_hr",
             "calories","avg_speed","elevation_gain"]
     conn = get_connection()
-    df[cols].to_sql("activities", conn, if_exists="replace", index=False)
+    
+    # Only insert rows that don't already exist
+    existing = pd.read_sql("SELECT activity_id FROM activities", conn)
+    new_rows = df[~df["activity_id"].isin(existing["activity_id"])]
+    
+    if not new_rows.empty:
+        new_rows[cols].to_sql("activities", conn, if_exists="append", index=False)
+        print(f"✅ Inserted {len(new_rows)} new activities.")
+    else:
+        print("ℹ️ No new activities to insert.")
+    
     conn.close()
-    print(f"✅ Loaded {len(df)} activities.")
 
 def load_steps(df: pd.DataFrame):
     if df.empty:
